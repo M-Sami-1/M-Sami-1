@@ -5,9 +5,7 @@
 
 ### Computer Science Student | Aspiring IT Infrastructure & Systems Engineer
 
-<p>
-  Building, experimenting, and understanding technology beyond the surface.
-</p>
+<p>Building, experimenting, and understanding technology beyond the surface.</p>
 
 <a href="https://github.com/M-Sami-1">
   <img src="https://img.shields.io/badge/GitHub-Profile-181717?style=for-the-badge&logo=github&logoColor=white" />
@@ -32,6 +30,8 @@ Currently exploring **IT Infrastructure, Networking, Cloud Computing, System Adm
 I enjoy turning concepts into working projects through hands-on experimentation, continuous learning, and problem-solving. My current focus includes strengthening my knowledge of Linux, Windows Server, networking, cloud technologies, and software development.
 
 My long-term goal is to become an **IT Infrastructure and Systems Engineering professional**, contributing to reliable, secure, and scalable technology environments.
+
+---
 
 ## Tech Stack & Tools
 
@@ -75,9 +75,13 @@ My long-term goal is to become an **IT Infrastructure and Systems Engineering pr
 
 <div align="center">
 
-<img width="49%" src="https://github-readme-stats.vercel.app/api?username=M-Sami-1&show_icons=true&theme=transparent&hide_border=true&rank_icon=github" />
+<a href="https://github.com/M-Sami-1">
+  <img width="49%" src="https://github-stats-extended.vercel.app/api?username=M-Sami-1&show_icons=true&theme=transparent&hide_border=true&rank_icon=github" alt="GitHub Statistics" />
+</a>
 
-<img width="49%" src="https://github-readme-stats.vercel.app/api/top-langs/?username=M-Sami-1&layout=compact&theme=transparent&hide_border=true" />
+<a href="https://github.com/M-Sami-1">
+  <img width="49%" src="https://github-stats-extended.vercel.app/api/top-langs/?username=M-Sami-1&layout=compact&theme=transparent&hide_border=true&langs_count=8" alt="Top Programming Languages" />
+</a>
 
 </div>
 
@@ -87,9 +91,13 @@ My long-term goal is to become an **IT Infrastructure and Systems Engineering pr
 
 <div align="center">
 
-<img src="https://github-readme-activity-graph.vercel.app/graph?username=M-Sami-1&theme=github-compact&hide_border=true&area=true" width="100%" alt="GitHub Contribution Activity" />
+<img src="https://raw.githubusercontent.com/M-Sami-1/M-Sami-1/output/snake.svg" width="100%" alt="Animated GitHub Contribution Snake" />
 
-<img src="https://raw.githubusercontent.com/M-Sami-1/M-Sami-1/output/snake.svg" alt="GitHub Contribution Snake Animation" width="100%" />
+<br/>
+
+<a href="https://github.com/M-Sami-1">
+  View Full GitHub Contribution Calendar
+</a>
 
 </div>
 
