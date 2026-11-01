@@ -19,88 +19,90 @@ jobs:
       - name: Build custom heatmap
         env:
           GITHUB_USERNAME: M-Sami-1
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python - <<'PY'
-          from datetime import date, timedelta
-          from html.parser import HTMLParser
+          from datetime import date, timedelta, datetime, timezone
           from urllib.request import Request, urlopen
-          from urllib.parse import urlencode
+          import json
           import html
-          import re
           import os
           import pathlib
 
           username = os.environ["GITHUB_USERNAME"]
+          token = os.environ["GITHUB_TOKEN"]
           end = date.today()
           start = end - timedelta(days=364)
           start -= timedelta(days=(start.weekday() + 1) % 7)
 
-          params = urlencode({"from": start.isoformat(), "to": end.isoformat()})
-          url = f"https://github.com/users/{username}/contributions?{params}"
-          request = Request(url, headers={"User-Agent": "Mozilla/5.0 GitHub-Contribution-Heatmap"})
+          query = """
+          query($login: String!, $from: DateTime!, $to: DateTime!) {
+            user(login: $login) {
+              contributionsCollection(from: $from, to: $to) {
+                contributionCalendar {
+                  totalContributions
+                  weeks {
+                    contributionDays {
+                      date
+                      contributionCount
+                    }
+                  }
+                }
+              }
+            }
+          }
+          """
+          payload = {
+              "query": query,
+              "variables": {
+                  "login": username,
+                  "from": f"{start.isoformat()}T00:00:00Z",
+                  "to": f"{end.isoformat()}T23:59:59Z"
+              }
+          }
+          request = Request(
+              "https://api.github.com/graphql",
+              data=json.dumps(payload).encode("utf-8"),
+              headers={
+                  "Authorization": f"Bearer {token}",
+                  "Content-Type": "application/json",
+                  "User-Agent": "GitHub-Contribution-Heatmap",
+                  "Accept": "application/vnd.github+json"
+              },
+              method="POST"
+          )
           with urlopen(request, timeout=30) as response:
-              page = response.read().decode("utf-8", errors="replace")
+              result = json.loads(response.read().decode("utf-8"))
 
-          class ContributionParser(HTMLParser):
-              def __init__(self):
-                  super().__init__()
-                  self.days = {}
-                  self.tooltips = {}
-                  self.current_tooltip = None
+          if result.get("errors"):
+              messages = "; ".join(error.get("message", "Unknown GraphQL error") for error in result["errors"])
+              raise RuntimeError(f"GitHub GraphQL API error: {messages}")
 
-              @staticmethod
-              def extract_count(value):
-                  if not value:
-                      return None
-                  match = re.search(r"(\\d[\\d,]*)\\s+contributions?", value, re.I)
-                  if match:
-                      return int(match.group(1).replace(",", ""))
-                  if re.search(r"\\bno contributions?\\b", value, re.I):
-                      return 0
-                  return None
+          user = result.get("data", {}).get("user")
+          if not user:
+              raise RuntimeError(f"GitHub user '{username}' was not returned by the GraphQL API.")
 
-              def handle_starttag(self, tag, attrs):
-                  attrs = dict(attrs)
-                  if tag == "td" and attrs.get("data-date") and attrs.get("data-level") is not None:
-                      day_id = attrs.get("id")
-                      count = self.extract_count(attrs.get("aria-label") or attrs.get("data-count") or attrs.get("title"))
-                      self.days[attrs["data-date"]] = {
-                          "id": day_id,
-                          "level": int(attrs["data-level"]),
-                          "count": count
-                      }
-                  elif tag == "tool-tip" and attrs.get("for"):
-                      self.current_tooltip = attrs["for"]
-
-              def handle_data(self, data):
-                  if self.current_tooltip:
-                      count = self.extract_count(data)
-                      if count is not None:
-                          self.tooltips[self.current_tooltip] = count
-
-              def handle_endtag(self, tag):
-                  if tag == "tool-tip":
-                      self.current_tooltip = None
-
-              def finish(self):
-                  for day in self.days.values():
-                      if day["count"] is None and day["id"]:
-                          day["count"] = self.tooltips.get(day["id"])
-
-          parser = ContributionParser()
-          parser.feed(page)
-          parser.finish()
-          if not parser.days:
-              raise RuntimeError("GitHub returned no contribution cells. The public contributions page may have changed or rate-limited this request.")
+          calendar = user["contributionsCollection"]["contributionCalendar"]
+          contribution_days = {}
+          for week in calendar["weeks"]:
+              for item in week["contributionDays"]:
+                  contribution_days[item["date"]] = int(item["contributionCount"])
 
           days = []
           current = start
           while current <= end:
-              item = parser.days.get(current.isoformat(), {"level": 0, "count": 0})
-              count = item["count"]
-              if count is None and item["level"] > 0:
-                  raise RuntimeError(f"GitHub returned an active contribution cell without a readable count for {current.isoformat()}.")
-              days.append((current, item["level"], count or 0))
+              count = contribution_days.get(current.isoformat(), 0)
+              if count == 0:
+                  level = 0
+              elif count <= 3:
+                  level = 1
+              elif count <= 6:
+                  level = 2
+              elif count <= 9:
+                  level = 3
+              else:
+                  level = 4
+              days.append((current, level, count))
               current += timedelta(days=1)
 
           cell, gap = 11, 3
@@ -110,11 +112,11 @@ jobs:
           width = left + columns * step + 18
           height = 166
           palette = ["#161B22", "#263B50", "#315D7E", "#438BB8", "#79C0FF"]
-          total = sum(count for _, _, count in days)
+          total = calendar["totalContributions"]
 
           parts = [
               f'<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 {width} {height}" role="img" aria-label="GitHub contribution heatmap for {html.escape(username)}">',
-              '<style>text{font-family:-apple-system,BlinkMacSystemFont,Segoe UI, sans-serif}.muted{fill:#8B949E}.heading{fill:#E6EDF3;font-size:15px;font-weight:600}.small{font-size:10px}</style>',
+              '<style>text{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif}.muted{fill:#8B949E}.heading{fill:#E6EDF3;font-size:15px;font-weight:600}.small{font-size:10px}</style>',
               f'<text x="{left}" y="17" class="heading">{total:,} contributions</text>',
               f'<text x="{left}" y="31" class="muted small">{start.strftime("%b %d, %Y")} to {end.strftime("%b %d, %Y")}</text>'
           ]
@@ -137,7 +139,7 @@ jobs:
               row = (day.weekday() + 1) % 7
               x = left + col * step
               y = top + row * step
-              color = palette[max(0, min(level, 4))]
+              color = palette[level]
               title = html.escape(f"{count} contributions on {day.strftime('%b %d, %Y')}")
               parts.append(f'<rect x="{x}" y="{y}" width="{cell}" height="{cell}" rx="2.5" fill="{color}"><title>{title}</title></rect>')
 
@@ -150,7 +152,8 @@ jobs:
           parts.append('</svg>')
 
           pathlib.Path("dist").mkdir(exist_ok=True)
-          pathlib.Path("dist/metrics.svg").write_text("\n".join(parts), encoding="utf-8")
+          pathlib.Path("dist/metrics.svg").write_text("\\n".join(parts), encoding="utf-8")
+          print(f"Generated heatmap with {total} contributions across {len(days)} days.")
           PY
 
       - name: Check out published branch
