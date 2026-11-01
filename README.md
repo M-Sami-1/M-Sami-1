@@ -91,13 +91,15 @@ My long-term goal is to become an **IT Infrastructure and Systems Engineering pr
 
 <div align="center">
 
+### Contribution Snake
+
 <img src="https://raw.githubusercontent.com/M-Sami-1/M-Sami-1/output/snake.svg" width="100%" alt="Animated GitHub Contribution Snake" />
 
 <br/>
 
-<a href="https://github.com/M-Sami-1">
-  View Full GitHub Contribution Calendar
-</a>
+### Contribution Calendar
+
+<img src="https://raw.githubusercontent.com/M-Sami-1/M-Sami-1/output/metrics.svg" width="100%" alt="GitHub Contribution Calendar" />
 
 </div>
 
