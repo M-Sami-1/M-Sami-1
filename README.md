@@ -1,54 +1,122 @@
-<p data-importer="text" align="left">Computer Science student passionate about building practical solutions and understanding how technology works beneath the surface. Exploring IT Infrastructure, Networking, Cloud Computing, System Administration, Cybersecurity, and Applied AI.<br><br>I enjoy turning concepts into working projects through hands on experimentation, continuous learning, and problem solving. Currently strengthening my skills in software development, Linux, Windows Server, networking, and cloud technologies.<br><br>Focused on building reliable systems, learning emerging technologies, and growing into an IT Infrastructure and Systems Engineering professional.</p>
 
-###
+<div align="center">
 
-<div data-importer="techs" align="left">
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" height="40" alt="javascript logo"  />
-  <img width="12" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" height="40" alt="react logo"  />
-  <img width="12" />
-  <img src="https://cdn.simpleicons.org/androidstudio/3DDC84" height="40" alt="androidstudio logo"  />
-  <img width="12" />
-  <img src="https://cdn.simpleicons.org/c/A8B9CC" height="40" alt="c logo"  />
-  <img width="12" />
-  <img src="https://cdn.simpleicons.org/cloudflare/F38020" height="40" alt="cloudflare logo"  />
-  <img width="12" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" height="40" alt="docker logo"  />
-  <img width="12" />
-  <img src="https://cdn.simpleicons.org/git/F05032" height="40" alt="git logo"  />
-  <img width="12" />
-  <img src="https://cdn.simpleicons.org/html5/E34F26" height="40" alt="html5 logo"  />
-  <img width="12" />
-  <img src="https://cdn.simpleicons.org/linux/FCC624" height="40" alt="linux logo"  />
-  <img width="12" />
-  <img src="https://cdn.simpleicons.org/nestjs/E0234E" height="40" alt="nestjs logo"  />
-  <img width="12" />
-  <img src="https://cdn.simpleicons.org/mongodb/47A248" height="40" alt="mongodb logo"  />
-  <img width="12" />
-  <img src="https://cdn.simpleicons.org/mysql/4479A1" height="40" alt="mysql logo"  />
-  <img width="12" />
-  <img src="https://cdn.simpleicons.org/nodedotjs/339933" height="40" alt="nodejs logo"  />
-  <img width="12" />
-  <img src="https://cdn.simpleicons.org/python/3776AB" height="40" alt="python logo"  />
-  <img width="12" />
-  <img src="https://cdn.simpleicons.org/redhat/EE0000" height="40" alt="redhat logo"  />
-  <img width="12" />
-  <img src="https://cdn.simpleicons.org/tensorflow/FF6F00" height="40" alt="tensorflow logo"  />
-  <img width="12" />
-  <img src="https://skillicons.dev/icons?i=aws" height="40" alt="amazonwebservices logo"  />
-  <img width="12" />
-  <img src="https://skillicons.dev/icons?i=jquery" height="40" alt="jquery logo"  />
-  <img width="12" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" height="40" alt="figma logo"  />
+# Muhammad Sami
+
+### Computer Science Student | Aspiring IT Infrastructure & Systems Engineer
+
+<p>
+  Building, experimenting, and understanding technology beyond the surface.
+</p>
+
+<a href="https://github.com/M-Sami-1">
+  <img src="https://img.shields.io/badge/GitHub-Profile-181717?style=for-the-badge&logo=github&logoColor=white" />
+</a>
+<a href="https://www.linkedin.com/in/muhammad-sami-khaliq-53083a322">
+  <img src="https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" />
+</a>
+<a href="https://www.instagram.com/_m.sam_i/">
+  <img src="https://img.shields.io/badge/Instagram-Follow-E4405F?style=for-the-badge&logo=instagram&logoColor=white" />
+</a>
+
 </div>
 
-###
+---
 
-<div data-importer="socials" align="left">
-  <img src="https://img.shields.io/static/v1?message=LinkedIn&logo=linkedin&label=&color=0077B5&logoColor=white&labelColor=&style=for-the-badge" height="34" alt="linkedin logo"  />
-  <img src="https://img.shields.io/static/v1?message=Instagram&logo=instagram&label=&color=E4405F&logoColor=white&labelColor=&style=for-the-badge" height="34" alt="instagram logo"  />
-  <img src="https://img.shields.io/static/v1?message=Gmail&logo=gmail&label=&color=D14836&logoColor=white&labelColor=&style=for-the-badge" height="34" alt="gmail logo"  />
-  <img src="https://img.shields.io/static/v1?message=Discord&logo=discord&label=&color=7289DA&logoColor=white&labelColor=&style=for-the-badge" height="34" alt="discord logo"  />
+## About Me
+
+Computer Science student passionate about building practical solutions and understanding how technology works beneath the surface.
+
+Currently exploring **IT Infrastructure, Networking, Cloud Computing, System Administration, Cybersecurity, and Applied AI.**
+
+I enjoy turning concepts into working projects through hands-on experimentation, continuous learning, and problem-solving. My current focus includes strengthening my knowledge of Linux, Windows Server, networking, cloud technologies, and software development.
+
+My long-term goal is to become an **IT Infrastructure and Systems Engineering professional**, contributing to reliable, secure, and scalable technology environments.
+
+## Tech Stack & Tools
+
+### Languages & Development
+
+<p align="left">
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" height="40" alt="C" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" height="40" alt="JavaScript" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" height="40" alt="Python" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" height="40" alt="HTML5" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" height="40" alt="React" />
+  <img src="https://cdn.simpleicons.org/nodedotjs/339933" height="40" alt="Node.js" />
+  <img src="https://cdn.simpleicons.org/nestjs/E0234E" height="40" alt="NestJS" />
+</p>
+
+### Infrastructure, Cloud & Operating Systems
+
+<p align="left">
+  <img src="https://cdn.simpleicons.org/linux/FCC624" height="40" alt="Linux" />
+  <img src="https://cdn.simpleicons.org/redhat/EE0000" height="40" alt="Red Hat" />
+  <img src="https://skillicons.dev/icons?i=aws" height="40" alt="AWS" />
+  <img src="https://cdn.simpleicons.org/cloudflare/F38020" height="40" alt="Cloudflare" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" height="40" alt="Docker" />
+</p>
+
+### Databases & Development Tools
+
+<p align="left">
+  <img src="https://cdn.simpleicons.org/mongodb/47A248" height="40" alt="MongoDB" />
+  <img src="https://cdn.simpleicons.org/mysql/4479A1" height="40" alt="MySQL" />
+  <img src="https://cdn.simpleicons.org/git/F05032" height="40" alt="Git" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" height="40" alt="Figma" />
+  <img src="https://cdn.simpleicons.org/androidstudio/3DDC84" height="40" alt="Android Studio" />
+  <img src="https://cdn.simpleicons.org/tensorflow/FF6F00" height="40" alt="TensorFlow" />
+  <img src="https://cdn.simpleicons.org/jquery/0769AD" height="40" alt="jQuery" />
+</p>
+
+---
+
+## GitHub Statistics
+
+<div align="center">
+
+<img width="49%" src="https://github-readme-stats.vercel.app/api?username=M-Sami-1&show_icons=true&theme=transparent&hide_border=true&rank_icon=github" />
+
+<img width="49%" src="https://github-readme-stats.vercel.app/api/top-langs/?username=M-Sami-1&layout=compact&theme=transparent&hide_border=true" />
+
 </div>
 
-###
+---
+
+## Contribution Activity
+
+<div align="center">
+
+<img src="https://github-readme-activity-graph.vercel.app/graph?username=M-Sami-1&theme=github-compact&hide_border=true&area=true" width="100%" alt="GitHub Contribution Activity" />
+
+<img src="https://raw.githubusercontent.com/M-Sami-1/M-Sami-1/output/snake.svg" alt="GitHub Contribution Snake Animation" width="100%" />
+
+</div>
+
+---
+
+## Connect With Me
+
+<div align="left">
+
+<a href="https://www.linkedin.com/in/muhammad-sami-khaliq-53083a322">
+  <img src="https://img.shields.io/badge/LinkedIn-Muhammad%20Sami-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" />
+</a>
+
+<a href="https://www.instagram.com/_m.sam_i/">
+  <img src="https://img.shields.io/badge/Instagram-@_m.sam_i-E4405F?style=for-the-badge&logo=instagram&logoColor=white" />
+</a>
+
+<a href="https://github.com/M-Sami-1">
+  <img src="https://img.shields.io/badge/GitHub-M--Sami--1-181717?style=for-the-badge&logo=github&logoColor=white" />
+</a>
+
+</div>
+
+---
+
+<div align="center">
+
+**Learning continuously. Building consistently. Improving every day.**
+
+</div>
