@@ -46,8 +46,6 @@ jobs:
                   super().__init__()
                   self.days = {}
               def handle_starttag(self, tag, attrs):
-                  if tag != "rect":
-                      return
                   attrs = dict(attrs)
                   day = attrs.get("data-date")
                   level = attrs.get("data-level")
