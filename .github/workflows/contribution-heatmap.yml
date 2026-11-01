@@ -45,27 +45,50 @@ jobs:
               def __init__(self):
                   super().__init__()
                   self.days = {}
+                  self.tooltips = {}
+
               def handle_starttag(self, tag, attrs):
                   attrs = dict(attrs)
-                  day = attrs.get("data-date")
-                  level = attrs.get("data-level")
-                  if not day or level is None:
-                      return
-                  label = attrs.get("aria-label", "")
-                  match = re.search(r"(\d[\d,]*)\s+contributions?", label, re.I)
-                  count = int(match.group(1).replace(",", "")) if match else 0
-                  self.days[day] = (int(level), count)
+                  if tag == "td" and attrs.get("data-date") and attrs.get("data-level") is not None:
+                      day_id = attrs.get("id")
+                      self.days[day_id] = {
+                          "date": attrs["data-date"],
+                          "level": int(attrs["data-level"]),
+                          "count": None
+                      }
+                  elif tag == "tool-tip" and attrs.get("for"):
+                      self.current_tooltip = attrs["for"]
+
+              def handle_data(self, data):
+                  if getattr(self, "current_tooltip", None):
+                      match = re.search(r"(\\d[\\d,]*)\\s+contributions?", data, re.I)
+                      if match:
+                          self.tooltips[self.current_tooltip] = int(match.group(1).replace(",", ""))
+
+              def handle_endtag(self, tag):
+                  if tag == "tool-tip":
+                      self.current_tooltip = None
+
+              def finish(self):
+                  for day_id, day in self.days.items():
+                      if day_id:
+                          day["count"] = self.tooltips.get(day_id)
 
           parser = ContributionParser()
           parser.feed(page)
+          parser.finish()
           if not parser.days:
               raise RuntimeError("GitHub returned no contribution cells. The public contributions page may have changed or rate-limited this request.")
 
+          parsed_days = {item["date"]: item for item in parser.days.values()}
           days = []
           current = start
           while current <= end:
-              level, count = parser.days.get(current.isoformat(), (0, 0))
-              days.append((current, level, count))
+              item = parsed_days.get(current.isoformat(), {"level": 0, "count": 0})
+              count = item["count"]
+              if count is None and item["level"] > 0:
+                  raise RuntimeError(f"Missing tooltip count for active contribution day {current.isoformat()}; refusing to publish an inaccurate total.")
+              days.append((current, item["level"], count or 0))
               current += timedelta(days=1)
 
           cell, gap = 11, 3
