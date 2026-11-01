@@ -1,9 +1,8 @@
-
-name: Generate Contribution Calendar
+name: Generate Custom Contribution Heatmap
 
 on:
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "17 0 * * *"
   workflow_dispatch:
 
 permissions:
@@ -14,15 +13,130 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Generate contribution calendar
-        uses: lowlighter/metrics@latest
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Build custom heatmap
+        env:
+          GITHUB_USERNAME: M-Sami-1
+        run: |
+          python - <<'PY'
+          from datetime import date, timedelta
+          from html.parser import HTMLParser
+          from urllib.request import Request, urlopen
+          from urllib.parse import urlencode
+          import html
+          import re
+          import os
+          import pathlib
+
+          username = os.environ["GITHUB_USERNAME"]
+          end = date.today()
+          start = end - timedelta(days=364)
+          start -= timedelta(days=(start.weekday() + 1) % 7)
+
+          params = urlencode({"from": start.isoformat(), "to": end.isoformat()})
+          url = f"https://github.com/users/{username}/contributions?{params}"
+          request = Request(url, headers={"User-Agent": "Mozilla/5.0 GitHub-Contribution-Heatmap"})
+          with urlopen(request, timeout=30) as response:
+              page = response.read().decode("utf-8", errors="replace")
+
+          class ContributionParser(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.days = {}
+              def handle_starttag(self, tag, attrs):
+                  if tag != "rect":
+                      return
+                  attrs = dict(attrs)
+                  day = attrs.get("data-date")
+                  level = attrs.get("data-level")
+                  if not day or level is None:
+                      return
+                  label = attrs.get("aria-label", "")
+                  match = re.search(r"(\d[\d,]*)\s+contributions?", label, re.I)
+                  count = int(match.group(1).replace(",", "")) if match else 0
+                  self.days[day] = (int(level), count)
+
+          parser = ContributionParser()
+          parser.feed(page)
+          if not parser.days:
+              raise RuntimeError("GitHub returned no contribution cells. The public contributions page may have changed or rate-limited this request.")
+
+          days = []
+          current = start
+          while current <= end:
+              level, count = parser.days.get(current.isoformat(), (0, 0))
+              days.append((current, level, count))
+              current += timedelta(days=1)
+
+          cell, gap = 11, 3
+          step = cell + gap
+          left, top = 42, 45
+          columns = ((end - start).days // 7) + 1
+          width = left + columns * step + 18
+          height = 166
+          palette = ["#161B22", "#263B50", "#315D7E", "#438BB8", "#79C0FF"]
+          total = sum(count for _, _, count in days)
+
+          parts = [
+              f'<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 {width} {height}" role="img" aria-label="GitHub contribution heatmap for {html.escape(username)}">',
+              '<style>text{font-family:-apple-system,BlinkMacSystemFont,Segoe UI, sans-serif}.muted{fill:#8B949E}.heading{fill:#E6EDF3;font-size:15px;font-weight:600}.small{font-size:10px}</style>',
+              f'<text x="{left}" y="17" class="heading">{total:,} contributions</text>',
+              f'<text x="{left}" y="31" class="muted small">{start.strftime("%b %d, %Y")} to {end.strftime("%b %d, %Y")}</text>'
+          ]
+
+          month_seen = set()
+          for day, _, _ in days:
+              if day.day == 1:
+                  col = (day - start).days // 7
+                  label = day.strftime("%b")
+                  if label not in month_seen:
+                      parts.append(f'<text x="{left + col * step}" y="42" class="muted small">{label}</text>')
+                      month_seen.add(label)
+
+          for label, weekday in [("Mon", 1), ("Wed", 3), ("Fri", 5)]:
+              y = top + weekday * step + 8
+              parts.append(f'<text x="0" y="{y}" class="muted small">{label}</text>')
+
+          for day, level, count in days:
+              col = (day - start).days // 7
+              row = (day.weekday() + 1) % 7
+              x = left + col * step
+              y = top + row * step
+              color = palette[max(0, min(level, 4))]
+              title = html.escape(f"{count} contributions on {day.strftime('%b %d, %Y')}")
+              parts.append(f'<rect x="{x}" y="{y}" width="{cell}" height="{cell}" rx="2.5" fill="{color}"><title>{title}</title></rect>')
+
+          legend_y = top + 7 * step + 12
+          parts.append(f'<text x="{left}" y="{legend_y}" class="muted small">Less</text>')
+          legend_x = left + 31
+          for i, color in enumerate(palette):
+              parts.append(f'<rect x="{legend_x + i * 15}" y="{legend_y - 9}" width="10" height="10" rx="2" fill="{color}"/>')
+          parts.append(f'<text x="{legend_x + 5 * 15 + 3}" y="{legend_y}" class="muted small">More</text>')
+          parts.append('</svg>')
+
+          pathlib.Path("dist").mkdir(exist_ok=True)
+          pathlib.Path("dist/metrics.svg").write_text("\n".join(parts), encoding="utf-8")
+          PY
+
+      - name: Check out published branch
+        uses: actions/checkout@v4
         with:
-          token: ${{ secrets.METRICS_TOKEN }}
-          committer_token: ${{ secrets.GITHUB_TOKEN }}
-          user: M-Sami-1
-          filename: metrics.svg
-          base: ""
-          plugin_calendar: yes
-          plugin_calendar_limit: 1
-          output_action: commit
-          committer_branch: output
+          ref: output
+          path: published
+          persist-credentials: true
+
+      - name: Publish heatmap without removing snake
+        run: |
+          cp dist/metrics.svg published/metrics.svg
+          cd published
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add metrics.svg
+          if ! git diff --cached --quiet; then
+            git commit -m "Update custom contribution heatmap"
+            git push origin output
+          else
+            echo "Heatmap is already up to date."
+          fi
